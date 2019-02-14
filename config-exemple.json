@@ -1,0 +1,7 @@
+{
+    "token": "Token du bot Discord",
+    "prefix": "?",
+    "email": "Email utilisé pour obtenir la clef d'authentification",
+    "key": "Clé d'authentification à l'API Google",
+    "spreadsheetId": "Identifiant du fishier Google Sheets (dispo sur l'URL)"
+}
