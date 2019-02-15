@@ -12,12 +12,23 @@ const util = require("./Util");
 let message = null;
 let command = null;
 
+/**
+ * 
+ * @param {Discord.Message} msg Objet message récupéré depuis le client Discord 
+ * pour savoir où la réponse doit être envoyé
+ * @param {string} cmd Commande entrée par l'utilisateur
+ */
 async function getJutsu(msg, cmd) {
     message = msg;
     command = cmd;
     extractDatas(organizeDatas);
 }
 
+/**
+ * Trie les personnage en fonction de la commande tapé par l'utilisateur
+ * puis répond au message de l'utilisateur
+ * @param {Village} datas 
+ */
 function displayResponse(datas) {
     let fieldsByPage = 5;
     let fieldsCount = 0;
@@ -27,6 +38,9 @@ function displayResponse(datas) {
     let embed = new Discord.RichEmbed();
     let group = []
 
+    /**
+     * On calcul les données par page
+     */
     datas.members.forEach(shinobi => {
         if(fieldsCount >= fieldsByPage) {
             pages.push(group)
@@ -46,7 +60,7 @@ function displayResponse(datas) {
 
     embed.setAuthor(`Cartes de type ${util.toTitleCase(command)} (Total : ${cardsCount})`, Jutsu.getNatureIcon(command));
     embed.setColor(Jutsu.getNatureColor(command));
-    // On initialise la première page
+    // On initialise la réponse avec la première page
     pages[0].forEach(element => {
         embed.addField(element.name, element.value);
     });
@@ -57,11 +71,20 @@ function displayResponse(datas) {
     message.channel.send(embed).then(msg => {
         msg.react(util.reactionControls.PREV_PAGE).then(r => {
             msg.react(util.reactionControls.NEXT_PAGE);
+            /**
+             * On indique quel réactions on vas utilisé pour la navigation
+             * puis on demande d'écouter pendant un sertain temps (en milliscondes) 
+             * quand un utilisateur réagit avec les réaction définit dans le filtre
+             * @param {Discord.User} reaction 
+             * @param {Discord.Emoji} user 
+             * @returns {boolean}
+             */
             const prevFilter = (reaction, user) => reaction.emoji.name === util.reactionControls.PREV_PAGE && !user.bot;
             const nextFilter = (reaction, user) => reaction.emoji.name === util.reactionControls.NEXT_PAGE && !user.bot;
             const prev = msg.createReactionCollector(prevFilter, {time: 180000});
             const next = msg.createReactionCollector(nextFilter, {time: 180000});
-    
+
+            // Code à éxécuter quand on clique sur le bouton précédent
             prev.on('collect', r => {
                 embed.fields = [];
 
@@ -80,6 +103,7 @@ function displayResponse(datas) {
                 msg.edit(embed);
             })
 
+            // Code à éxécuter quand on clique sur le bouton suivant
             next.on('collect', r => {
                 embed.fields = [];
 
@@ -101,6 +125,11 @@ function displayResponse(datas) {
     });
 }
 
+/**
+ * Construit un objet JSON à partir des données extraite du fichier,
+ * en utilisant les classes Village, Shinobi et Jutsu pour organiser le JSON
+ * @param {array} datas Tableau contenant des tableau représentant chaque ligne du Sheets
+ */
 function organizeDatas(datas) {
     let allShinobi = new Village();
 
@@ -121,7 +150,18 @@ function organizeDatas(datas) {
     displayResponse(allShinobi);
 }
 
+/**
+ * Récupère les données depuis Google Sheets
+ * @param {function} callback 
+ */
 function extractDatas(callback) {
+    /**
+     * Contient les donées nécessaires pour faire une requête
+     * qui sont défini dans le fichier config.json
+     * @argument {string} spreadsheetId Identifiant de la feuille Google Sheets
+     * @argument {Array[string] | string} range Cellules à récupérés (cf https://developers.google.com/sheets/api/guides/concepts#a1_notation)
+     * @argument {string} auth
+     */
     let request = {
         spreadsheetId: config.spreadsheetId,
         range: ['Tout!A2:E'],

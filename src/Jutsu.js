@@ -1,5 +1,12 @@
 class Jutsu {
     
+    /**
+     * 
+     * @param {string} name Nom du jutsu
+     * @param {string} description 
+     * @param {string} nature Nature du jutsu
+     * @param {int} stars Nombre d'étoile de base de la carte
+     */
     constructor(name, description, nature = "normal", stars = 1) {
         this.name = name;
         this.description = description;
@@ -20,6 +27,13 @@ class Jutsu {
         
     }
 
+    /**
+     * Obtenir l'URL de l'icône de la nature du jutsu courant
+     * @returns {string}
+     * @example 
+     * let rasengan = new Jutsu("Rasengan");
+     * rasengan.natureIcon();
+     */
     get natureIcon() {
         switch (this.nature) {
             case "annihilation":
@@ -39,26 +53,36 @@ class Jutsu {
         }
     }
     
+    /**
+     * Obtenir la couleur de la nature du jutsu courant
+     * @returns {ColorResolvable}
+     */
     get natureColor() {
         switch (this.nature) {
-            //          HEX            RGB
             case "annihilation":
-                return 	5127339;    //"#4e3cab"
+                return 	5127339;
             case "impact":
-                return 	13487368;   // "#cdcd08"
+                return 	13487368;
             case "manipulation":
-                return 	10118656;   // "#9a6600"
+                return 	10118656;
             case "lunge":
-                return 	13845553;   // "#d34431"
+                return 	13845553;
             case "normal":this.natureColor = null;
-                return 	9605778;    // "#929292"
+                return 	9605778;
             case "release":
-                return 	431194;     // "#06945a"
+                return 	431194;
             default:
                 return null;
         }
     }
 
+    /**
+     * Obtenir l'URL de l'icone d'un type de jutsu
+     * @param {string} nature 
+     * @returns {string}
+     * @example 
+     * Jutsu.getNatureIcon("lunge");
+     */
     static getNatureIcon(nature) {
         switch (nature) {
             case "annihilation":
@@ -78,6 +102,13 @@ class Jutsu {
         }
     }
 
+    /**
+     * Obtenir la couleur d'une nature de jutsu en particulier
+     * @param {string} nature 
+     * @example
+     * Jutsu.getNatureColor("lunge");
+     * @returns {ColorResolvable}
+     */
     static getNatureColor(nature) {
         switch (nature) {
             case "annihilation":

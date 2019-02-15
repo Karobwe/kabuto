@@ -1,11 +1,21 @@
 class Shinobi {
     
+    /**
+     * Objet liant un personnage avec ses jutsu
+     * @param {string} name Nom du personnage
+     * @param {string} type Le type du personnage (attaque, défense, ...)
+     * @param {Jutsu} jutsu Liste des jutsu du personnage
+     */
     constructor(name, type, jutsu = []) {
         this.name = name;
         this.type = type;
         this.jutsu = jutsu;
     }
 
+    /**
+     * Ajoute ou met à jour un jutsu au personnage
+     * @param {Jutsu} jutsu Le nouvel jutsu à ajouter
+     */
     addJutsu(jutsu) {
         let finded = false;
         this.jutsu.forEach(element => {
@@ -25,6 +35,9 @@ class Shinobi {
         }
     }
 
+    /**
+     * @returns {string} URL vers l'icone représantant le type du personnage
+     */
     get typeIcon() {
         switch (this.type) {
             case "attaque":
@@ -47,6 +60,11 @@ class Shinobi {
         }
     }
 
+    /**
+     * Renvoie tout les jutsu du personnage qui appartiennent au type donnée en paramètre
+     * @param {string} nature Le type de jutsu qu'on recherche
+     * @returns {string}
+     */
     getAllJutsu(nature) {
         let str = "";
         this.jutsu.forEach(j => {

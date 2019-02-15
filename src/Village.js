@@ -1,4 +1,8 @@
 class Village {
+    /**
+     * Objet contenant une liste des personnages
+     * @param  {Array<Shinobi>?} shinobis Listes des personnages à ajouter
+     */
     constructor(...shinobis) {
         this.members = [];
         for(let i = 0; i < arguments.length; i++) {
@@ -6,6 +10,10 @@ class Village {
         }
     }
 
+    /**
+     * Ajoute un personnage ou le met à jours si il existe déjà
+     * @param {Shinobi} shinobi 
+     */
     addShinobi(shinobi) {
         let finded = false;
 
@@ -27,6 +35,11 @@ class Village {
         }
     }
 
+    /**
+     * Récupère un personnage
+     * @param {string} name Nom du personnage rechercher
+     * @returns {Shinobi}
+     */
     getShinobi(name) {
         let character = undefined;
         this.members.forEach(shinobi => {
